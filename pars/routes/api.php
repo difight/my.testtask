@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdvController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('/adv', [AdvController::class, 'index']);
+
+Route::post('/adv', [AdvController::class, 'search']);
+
+Route::post('/adv/{price_from}-{price_to}', [AdvController::class, 'search']);
