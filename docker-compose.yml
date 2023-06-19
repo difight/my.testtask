@@ -1,0 +1,56 @@
+version: '3.8'
+services:
+  backend:
+    image: adv:dev
+    container_name: backend
+    build: .
+    volumes:
+      - './pars:/var/www/html'
+    ports:
+      - "9000:9000"
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www/html/
+    depends_on:
+      - db
+    networks:
+      - app-network
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8080:80"
+    volumes:
+      - ./pars:/var/www/html/
+      - ./pars/nginx/:/etc/nginx/conf.d/
+    depends_on:
+      - backend
+      - db
+    networks:
+      - app-network
+  db:
+    image: mysql:latest
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: adv
+      MYSQL_ROOT_PASSWORD: advadv2
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql/
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
+volumes:
+  dbdata:
+    driver: local
