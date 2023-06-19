@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Models\Adv;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +14,5 @@ use App\Models\Adv;
 */
 
 Route::get('/', function () {
-  foreach (Adv::all() as $adv) {
-    echo $adv;
-  }
+    return view('welcome');
 });
